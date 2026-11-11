@@ -39,6 +39,9 @@ capabilities:
 
             sh /tmp/install-mise.sh
 
+            mise settings add idiomatic_version_file_enable_tools node
+            mise settings add idiomatic_version_file_enable_tools pnpm
+
             if [ -n "${WORKSPACE_DIR:-}" ]; then
               mise settings add trusted_config_paths "$WORKSPACE_DIR"
             fi
