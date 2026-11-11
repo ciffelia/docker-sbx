@@ -35,9 +35,6 @@ fi
 
 project_dir=$(cd -- "${project_arg:-.}" && pwd -P)
 project_name=$(basename -- "$project_dir")
-script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
-kit_dir=$script_dir/my-kit
-[[ -d "$kit_dir" ]] || { printf 'Kit directory not found: %s\n' "$kit_dir" >&2; exit 1; }
 
 if "$local_only"; then
   if [[ $(git -C "$project_dir" rev-parse --is-inside-work-tree 2>/dev/null) != true ]]; then
@@ -70,9 +67,7 @@ workspace: .
 
 kits:
   - docker.io/sbx/github-ssh:latest
-EOF
-    printf '  - %s\n' "$(yaml_quote "$kit_dir")"
-    cat <<'EOF'
+  - "git+https://github.com/ciffelia/docker-sbx.git#ref=main&dir=my-kit"
 
 additionalWorkspaces:
   - path: ./.sbx-local/.codex
