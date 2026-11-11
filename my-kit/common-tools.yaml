@@ -22,6 +22,7 @@ capabilities:
 
         - description: Install mise
           user: "1000"
+          env: [WORKSPACE_DIR]
           command: |
             set -eu
 
@@ -37,6 +38,10 @@ capabilities:
               --decrypt /tmp/install-mise.sh.sig
 
             sh /tmp/install-mise.sh
+
+            if [ -n "${WORKSPACE_DIR:-}" ]; then
+              mise settings add trusted_config_paths "$WORKSPACE_DIR"
+            fi
 
         - description: Install tools
           user: "1000"
