@@ -4,7 +4,7 @@ My Docker Sandboxes config
 
 ## Usage
 
-Allow this repository as a Kit source once on the development server. If you have customized this setting, keep your existing entries too.
+Allow this repository as a Kit source once on each machine where you use Docker Sandboxes. If you have customized this setting, keep your existing entries too.
 
 ```sh
 sbx settings set kit.allowedSources '["docker.io/","dhi.io/","github.com/ciffelia/docker-sbx"]'
