@@ -34,6 +34,7 @@ if (($#)); then
 fi
 
 project_dir=$(cd -- "${project_arg:-.}" && pwd -P)
+project_name=$(basename -- "$project_dir")
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 kit_dir=$script_dir/my-kit
 [[ -d "$kit_dir" ]] || { printf 'Kit directory not found: %s\n' "$kit_dir" >&2; exit 1; }
@@ -61,6 +62,9 @@ if [[ ! -e "$project_dir/sbxenv.yaml" && ! -L "$project_dir/sbxenv.yaml" ]]; the
   {
     cat <<'EOF'
 schemaVersion: "1"
+EOF
+    printf 'name: %s\n' "$(yaml_quote "$project_name")"
+    cat <<'EOF'
 agent: shell
 workspace: .
 
