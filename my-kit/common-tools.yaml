@@ -1,0 +1,46 @@
+# syntax=docker/sandbox-kit:3
+schemaVersion: "3"
+kind: mixin
+
+build: |
+  FROM scratch
+  ENV PATH="/home/agent/.local/share/mise/shims:${PATH}"
+
+capabilities:
+  - type: com.docker.sandbox/git-identity@1
+
+  - type: com.docker.sandbox/lifecycle@1
+    config:
+      install:
+        - description: Install system dependencies
+          user: "0"
+          command: |
+            set -eu
+
+            apt-get update
+            apt-get install -y --no-install-recommends libatomic1
+
+        - description: Install mise
+          user: "1000"
+          command: |
+            set -eu
+
+            gpg --batch \
+              --keyserver hkps://keys.openpgp.org:443 \
+              --recv-keys 24853EC9F655CE80B48E6C3A8B81C9D17413A06D
+
+            curl -fsSL https://mise.jdx.dev/install.sh.sig \
+              -o /tmp/install-mise.sh.sig
+
+            gpg --batch --yes \
+              --output /tmp/install-mise.sh \
+              --decrypt /tmp/install-mise.sh.sig
+
+            sh /tmp/install-mise.sh
+
+        - description: Install tools
+          user: "1000"
+          command: |
+            set -eu
+
+            mise use --global node@lts pnpm@latest codex@latest
